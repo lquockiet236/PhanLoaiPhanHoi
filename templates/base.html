@@ -1,0 +1,592 @@
+<!doctype html>
+<html lang="vi">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}Campus Voice{% endblock %}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --ink: #172321;
+            --muted: #6c7772;
+            --line: #dfe5df;
+            --paper: #f4f7f2;
+            --lime: #d4f36b;
+            --green: #244c42;
+            --white: #fff;
+            --coral: #e78261
+        }
+
+        * {
+            box-sizing: border-box
+        }
+
+        body {
+            margin: 0;
+            background: var(--paper);
+            color: var(--ink);
+            font: 15px 'DM Sans', sans-serif
+        }
+
+        h1,
+        h2,
+        h3,
+        p {
+            margin: 0
+        }
+
+        h1,
+        h2,
+        h3,
+        .brand {
+            font-family: 'Space Grotesk', sans-serif
+        }
+
+        a {
+            color: inherit
+        }
+
+        .site-header {
+            height: 72px;
+            padding: 0 max(4vw, 22px);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: var(--paper);
+            border-bottom: 1px solid var(--line)
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 11px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 18px
+        }
+
+        .brand-mark {
+            width: 32px;
+            height: 32px;
+            display: grid;
+            place-items: center;
+            background: var(--lime);
+            border-radius: 50%;
+            font-size: 20px
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 18px;
+            margin-left: auto
+        }
+
+        .header-actions a {
+            font-size: 13px;
+            font-weight: 700;
+            text-decoration: none
+        }
+
+        .header-actions .auth-link {
+            color: var(--green)
+        }
+
+        .header-actions .button {
+            padding-inline: 16px
+        }
+
+        .user-name {
+            font-size: 12px;
+            color: var(--muted)
+        }
+
+        .logout-form {
+            margin: 0
+        }
+
+        .logout-button,
+        .button {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            padding: 11px 15px;
+            border: 0;
+            background: var(--green);
+            color: white;
+            font: 600 13px 'DM Sans', sans-serif;
+            text-decoration: none;
+            cursor: pointer
+        }
+
+        .button:hover,
+        .logout-button:hover {
+            background: #18392f
+        }
+
+        .button.secondary {
+            background: #edf2ec;
+            color: var(--green);
+            border: 1px solid var(--line)
+        }
+
+        .app-shell {
+            max-width: 1240px;
+            margin: auto;
+            padding: 42px 26px 70px
+        }
+
+        .page-intro {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            gap: 24px;
+            margin-bottom: 28px
+        }
+
+        .eyebrow {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            font-weight: 700;
+            color: var(--green);
+            margin-bottom: 10px
+        }
+
+        .page-intro h1 {
+            font-size: clamp(28px, 4vw, 42px);
+            line-height: 1.08
+        }
+
+        .page-intro p {
+            margin-top: 10px;
+            color: var(--muted);
+            line-height: 1.6;
+            max-width: 650px
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: minmax(270px, .75fr) minmax(0, 1.5fr);
+            gap: 30px;
+            align-items: start
+        }
+
+        .panel,
+        .feedback-card,
+        .auth-panel {
+            background: var(--white);
+            border: 1px solid var(--line);
+            box-shadow: 0 12px 36px rgba(37, 67, 54, .045)
+        }
+
+        .panel {
+            padding: 24px
+        }
+
+        .panel h2 {
+            font-size: 20px;
+            margin-bottom: 7px
+        }
+
+        .panel-copy {
+            font-size: 13px;
+            line-height: 1.55;
+            color: var(--muted);
+            margin-bottom: 22px
+        }
+
+        .field {
+            display: block;
+            margin: 0 0 16px;
+            font-size: 12px;
+            font-weight: 700;
+            color: #4c5953
+        }
+
+        .field input,
+        .field select,
+        .field textarea,
+        .filters input,
+        .filters select {
+            display: block;
+            width: 100%;
+            margin-top: 7px;
+            border: 1px solid var(--line);
+            background: #fbfcfa;
+            color: var(--ink);
+            font: 400 14px 'DM Sans', sans-serif;
+            padding: 12px;
+            border-radius: 2px;
+            outline: none
+        }
+
+        .field textarea {
+            resize: vertical;
+            line-height: 1.5
+        }
+
+        .field input:focus,
+        .field select:focus,
+        .field textarea:focus,
+        .filters input:focus,
+        .filters select:focus {
+            border-color: var(--green);
+            box-shadow: 0 0 0 3px rgba(36, 76, 66, .08)
+        }
+
+        .list-heading {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin: 0 0 14px
+        }
+
+        .list-heading h2 {
+            font-size: 20px
+        }
+
+        .count {
+            font-size: 12px;
+            color: var(--muted)
+        }
+
+        .feedback-list {
+            display: grid;
+            gap: 14px
+        }
+
+        .feedback-card {
+            padding: 20px;
+            scroll-margin-top: 22px
+        }
+
+        .feedback-top,
+        .feedback-meta,
+        .message-head,
+        .filters {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px
+        }
+
+        .feedback-meta {
+            justify-content: flex-start;
+            flex-wrap: wrap;
+            color: var(--muted);
+            font-size: 11px;
+            margin-bottom: 11px
+        }
+
+        .category-tag,
+        .priority-tag,
+        .status-tag {
+            display: inline-flex;
+            align-items: center;
+            padding: 5px 9px;
+            background: #edf2ec;
+            color: var(--green);
+            font-size: 11px;
+            font-weight: 700
+        }
+
+        .priority-tag {
+            background: #fff0e9;
+            color: #9b4a2e
+        }
+
+        .status-tag {
+            background: #eef5d7;
+            color: #425528
+        }
+
+        .feedback-card h3 {
+            font-size: 17px;
+            margin-bottom: 9px
+        }
+
+        .feedback-copy {
+            font-size: 13px;
+            line-height: 1.65;
+            color: #53605a;
+            white-space: pre-wrap
+        }
+
+        .model-note {
+            font-size: 11px;
+            color: var(--muted);
+            margin-top: 10px
+        }
+
+        .thread {
+            margin-top: 18px;
+            padding-top: 15px;
+            border-top: 1px solid var(--line)
+        }
+
+        .thread h4 {
+            font-size: 12px;
+            margin-bottom: 12px
+        }
+
+        .message {
+            padding: 12px 14px;
+            margin: 8px 0;
+            background: #f5f8f3;
+            border-left: 3px solid var(--lime)
+        }
+
+        .message.admin {
+            background: #eef4f0;
+            border-left-color: var(--green)
+        }
+
+        .message-head {
+            font-size: 11px;
+            color: var(--muted);
+            margin-bottom: 6px
+        }
+
+        .message p {
+            font-size: 13px;
+            line-height: 1.55;
+            white-space: pre-wrap
+        }
+
+        .reply-form {
+            margin-top: 13px
+        }
+
+        .reply-form textarea {
+            width: 100%;
+            min-height: 74px;
+            padding: 11px;
+            border: 1px solid var(--line);
+            font: 13px 'DM Sans', sans-serif;
+            resize: vertical
+        }
+
+        .reply-form .button {
+            margin-top: 8px
+        }
+
+        .filters {
+            justify-content: flex-start;
+            flex-wrap: wrap;
+            margin-bottom: 18px;
+            padding: 14px;
+            background: #fff;
+            border: 1px solid var(--line)
+        }
+
+        .filters input {
+            width: min(300px, 100%);
+            margin: 0
+        }
+
+        .filters select {
+            width: auto;
+            margin: 0
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 22px
+        }
+
+        .stat {
+            padding: 15px;
+            background: var(--green);
+            color: #fff
+        }
+
+        .stat strong {
+            display: block;
+            font: 700 24px 'Space Grotesk';
+            color: var(--lime)
+        }
+
+        .stat span {
+            font-size: 11px;
+            color: #d0dbd4
+        }
+
+        .empty-state {
+            padding: 32px;
+            border: 1px dashed #bdc9bf;
+            text-align: center;
+            color: var(--muted);
+            font-size: 13px
+        }
+
+        .flash-stack {
+            position: fixed;
+            right: 20px;
+            top: 84px;
+            z-index: 5;
+            display: grid;
+            gap: 8px;
+            max-width: min(420px, calc(100vw - 40px))
+        }
+
+        .flash {
+            padding: 13px 16px;
+            background: #fff;
+            border-left: 4px solid var(--green);
+            box-shadow: 0 8px 24px #173c2720;
+            font-size: 13px
+        }
+
+        .flash.error {
+            border-color: var(--coral)
+        }
+
+        .auth-wrap {
+            min-height: calc(100vh - 72px);
+            display: grid;
+            place-items: center;
+            padding: 42px 20px;
+            background: radial-gradient(ellipse at 12% 85%, #dce9d5 0, transparent 34%), var(--paper)
+        }
+
+        .auth-panel {
+            width: min(460px, 100%);
+            padding: 34px
+        }
+
+        .auth-panel h1 {
+            font-size: 30px
+        }
+
+        .auth-panel>p {
+            margin: 9px 0 24px;
+            color: var(--muted);
+            font-size: 13px;
+            line-height: 1.6
+        }
+
+        .auth-options {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin: 4px 0 18px
+        }
+
+        .remember-me {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            color: var(--muted)
+        }
+
+        .remember-me input {
+            width: 15px;
+            height: 15px
+        }
+
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 10px
+        }
+
+        .auth-action-button,
+        .register-actions .button {
+            margin-left: auto
+        }
+
+        .auth-foot {
+            margin-top: 20px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 13px
+        }
+
+        .auth-foot a {
+            color: var(--green);
+            font-weight: 700
+        }
+
+        .empty-state h3 {
+            font-size: 17px;
+            color: var(--ink);
+            margin-bottom: 7px
+        }
+
+        @media(max-width:800px) {
+            .app-shell {
+                padding: 30px 18px 50px
+            }
+
+            .dashboard-grid {
+                grid-template-columns: 1fr
+            }
+
+            .page-intro {
+                align-items: flex-start;
+                flex-direction: column
+            }
+
+            .filters>* {
+                flex: 1 1 100%;
+                width: 100% !important
+            }
+
+            .stats {
+                grid-template-columns: 1fr
+            }
+
+            .site-header {
+                padding: 0 16px
+            }
+
+            .header-actions {
+                gap: 10px
+            }
+
+            .user-name {
+                display: none
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header class="site-header">
+        <a class="brand"
+            href="{{ url_for('index') if current_user and current_user['role'] != 'admin' else url_for('admin') if current_user else url_for('login') }}">
+            <span class="brand-mark">↗</span><span>Campus Voice</span>
+        </a>
+        {% if request.endpoint not in ['login', 'register'] %}
+        <nav class="header-actions">
+            {% if current_user %}
+            <span class="user-name">{{ current_user['name'] }}</span>
+            <form class="logout-form" action="{{ url_for('logout') }}" method="post"><button class="logout-button"
+                    type="submit">Đăng xuất</button></form>
+            {% else %}
+            <a class="auth-link" href="{{ url_for('login') }}">Đăng nhập</a>
+            <a class="button" href="{{ url_for('register') }}">Đăng ký</a>
+            {% endif %}
+        </nav>
+        {% endif %}
+    </header>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}<div class="flash-stack">{% for category, message in messages %}<div class="flash {{ category }}">
+            {{ message }}</div>{% endfor %}</div>{% endif %}
+    {% endwith %}
+    {% block content %}{% endblock %}
+</body>
+
+</html>

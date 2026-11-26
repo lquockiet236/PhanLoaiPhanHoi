@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}Tạo tài khoản · Campus Voice{% endblock %}
+{% block content %}
+<main class="auth-wrap">
+    <section class="auth-panel">
+        <div class="eyebrow">Campus Voice · Dành cho sinh viên</div>
+        <h1>Tạo tài khoản</h1>
+        <!-- <p>Tài khoản giúp bạn quản lý phản hồi và tiếp tục trao đổi với nhà trường.</p> -->
+        <form method="post">
+            <label class="field">Họ và tên<input name="name" autocomplete="name" required maxlength="120"></label>
+            <label class="field">Email<input type="email" name="email" autocomplete="email" required
+                    maxlength="160"></label>
+            <label class="field">Mật khẩu<input type="password" name="password" autocomplete="new-password"
+                    minlength="6" required></label>
+            <label class="field">Nhập lại mật khẩu<input type="password" name="confirm_password"
+                    autocomplete="new-password" minlength="6" required></label>
+            <div class="form-actions register-actions">
+                <button class="button" type="submit">Đăng ký</button>
+            </div>
+        </form>
+        <div class="auth-foot"> <a href="{{ url_for('login') }}">Đã có tài khoản?</a></div>
+    </section>
+</main>
+{% endblock %}

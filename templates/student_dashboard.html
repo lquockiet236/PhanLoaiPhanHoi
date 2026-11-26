@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% block title %}Phản hồi của tôi · Campus Voice{% endblock %}
+{% block content %}
+<main class="app-shell">
+    <section class="page-intro">
+        <div>
+            <h1>
+                Không gian sinh viên
+            </h1>
+            <!-- <h1>Ý kiến của bạn, được lắng nghe.</h1> -->
+            <!-- <p>Gửi phản hồi và theo dõi trả lời từ quản trị viên trên từng ý kiến.</p> -->
+        </div>
+    </section>
+    <div class="dashboard-grid">
+        <section class="panel">
+            <h2>Gửi phản hồi</h2>
+            <!-- <p class="panel-copy">Danh mục được tự động dự đoán từ tiêu đề và nội dung phản hồi.</p> -->
+            <form method="post" action="{{ url_for('index') }}">
+                <label class="field">Tiêu đề<input name="subject" maxlength="180" required placeholder=""></label>
+                <label class="field">Nội dung<textarea name="message" rows="6" required
+                        placeholder="Mô tả sự việc, địa điểm và thời gian..."></textarea></label>
+                <button class="button" type="submit">Gửi phản hồi <span aria-hidden="true">↗</span></button>
+            </form>
+        </section>
+        <section>
+            <div class="stats">
+                <div class="stat"><strong id="stat-total">{{ feedback|length }}</strong><span>Phiếu của tôi</span></div>
+                <div class="stat"><strong id="stat-pending">{{ feedback|selectattr('status', 'equalto',
+                        'Mới')|list|length
+                        }}</strong><span>Chờ tiếp nhận</span></div>
+                <div class="stat"><strong id="stat-responded">{{ feedback|selectattr('status', 'in', ['Đã phản hồi',
+                        'Đã đóng'])|list|length
+                        }}</strong><span>Đã phản hồi</span></div>
+            </div>
+            <div class="list-heading">
+                <h2>Phản hồi của tôi</h2><span class="count">{{ feedback|length }} phiếu</span>
+            </div>
+            {% if feedback %}<div class="feedback-list">
+                {% for item in feedback %}<article class="feedback-card" id="feedback-{{ item.id }}">
+                    <div class="feedback-meta"><span class="status-tag">{{ item.status }}</span><span>{{ item.created_at
+                            }}</span></div>
+                    <h3>{{ item.subject }}</h3>
+                    <p class="feedback-copy">{{ item.message }}</p>
+                    <div class="thread">
+                        <h4>Trao đổi với nhà trường</h4>
+                        {% for message in item.messages %}<div
+                            class="message {{ 'admin' if message.author_role == 'admin' else '' }}">
+                            <div class="message-head"><strong>{{ message.author_name }} · {{ 'Quản trị viên' if
+                                    message.author_role == 'admin' else 'Sinh viên' }}</strong><time>{{
+                                    message.created_at }}</time></div>
+                            <p>{{ message.body }}</p>
+                        </div>{% else %}<p class="model-note">Chưa có tin nhắn trao đổi.</p>{% endfor %}
+                        {% if item.status == 'Đã đóng' %}<p class="model-note"></p>{% endif %}
+                    </div>
+                </article>{% endfor %}
+            </div>{% else %}<div class="empty-state">
+                <h3>Chưa có phản hồi nào</h3>Phiếu bạn gửi sẽ xuất hiện tại đây.
+            </div>{% endif %}
+        </section>
+    </div>
+</main>
+<script>
+    const statsEndpoint = "{{ url_for('my_feedback_stats') }}";
+    const refreshFeedbackStats = async () => {
+        try {
+            const response = await fetch(statsEndpoint, { cache: "no-store" });
+            if (!response.ok) return;
+            const stats = await response.json();
+            document.getElementById("stat-total").textContent = stats.total;
+            document.getElementById("stat-pending").textContent = stats.pending;
+            document.getElementById("stat-responded").textContent = stats.responded;
+        } catch (_error) {
+            // A later polling cycle retries if the network is temporarily unavailable.
+        }
+    };
+    window.setInterval(refreshFeedbackStats, 5000);
+</script>
+{% endblock %}
